@@ -39,6 +39,14 @@
     function drawMaze() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      drawLabels();
+    }
+
+    function drawLabels() {
+      ctx.fillStyle = 'black';
+      ctx.font = 'bold 20px sans-serif';
+      ctx.fillText('Start', 10, 30);             // Top-left
+      ctx.fillText('End', 10, canvas.height - 10); // Bottom-left
     }
 
     img.onload = () => {
