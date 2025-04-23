@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Maze Draw</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: sans-serif;
+      margin: 2rem;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      cursor: crosshair;
+      display: block;
+      margin: auto;
+    }
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Solve the Maze</h1>
+  <p>Draw your path with your mouse — your answer will be revealed by the line you create!</p>
+  <canvas id="mazeCanvas" width="800" height="600"></canvas>
+  <button id="resetBtn">Reset</button>
+
+  <script>
+    const canvas = document.getElementById('mazeCanvas');
+    const ctx = canvas.getContext('2d');
+    const resetBtn = document.getElementById('resetBtn');
+
+    const img = new Image();
+    img.src = 'maze.png'; // Make sure this matches your uploaded file name
+
+    function drawMaze() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    }
+
+    img.onload = () => {
+      drawMaze();
+    };
+
+    let drawing = false;
+
+    canvas.addEventListener('mousedown', () => {
+      drawing = true;
+      ctx.beginPath();
+    });
+
+    canvas.addEventListener('mouseup', () => {
+      drawing = false;
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+      if (!drawing) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = 'red';
+
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    });
+
+    resetBtn.addEventListener('click', () => {
+      drawMaze();
+    });
+  </script>
+</body>
+</html>
