@@ -34,7 +34,7 @@
     const resetBtn = document.getElementById('resetBtn');
 
     const img = new Image();
-    img.src = 'maze.png'; // Make sure this matches your uploaded file name
+    img.src = 'maze.png'; // Make sure this matches your uploaded image file
 
     function drawMaze() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -45,8 +45,8 @@
     function drawLabels() {
       ctx.fillStyle = 'black';
       ctx.font = 'bold 20px sans-serif';
-      ctx.fillText('Start', 10, 30);             // Top-left
-      ctx.fillText('End', 10, canvas.height - 10); // Bottom-left
+      ctx.fillText('Start', 10, 30); // Top-left
+      ctx.fillText('End', canvas.width - 60, canvas.height - 10); // Bottom-right
     }
 
     img.onload = () => {
