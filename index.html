@@ -16,7 +16,7 @@
       margin: auto;
     }
     button {
-      margin-top: 1rem;
+      margin: 0.5rem;
       padding: 0.5rem 1rem;
       font-size: 16px;
     }
@@ -26,15 +26,21 @@
   <h1>Solve the Maze</h1>
   <p>Draw your path with your mouse — your answer will be revealed by the line you create!</p>
   <canvas id="mazeCanvas" width="800" height="600"></canvas>
-  <button id="resetBtn">Reset</button>
+  <div>
+    <button id="resetBtn">Reset</button>
+    <button id="undoBtn">Undo</button>
+  </div>
 
   <script>
     const canvas = document.getElementById('mazeCanvas');
     const ctx = canvas.getContext('2d');
     const resetBtn = document.getElementById('resetBtn');
+    const undoBtn = document.getElementById('undoBtn');
 
     const img = new Image();
     img.src = 'maze.png'; // Make sure this matches your uploaded image file
+
+    const undoStack = [];
 
     function drawMaze() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -55,9 +61,16 @@
 
     let drawing = false;
 
-    canvas.addEventListener('mousedown', () => {
+    canvas.addEventListener('mousedown', (e) => {
       drawing = true;
       ctx.beginPath();
+
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      ctx.moveTo(x, y);
+      undoStack.push(canvas.toDataURL()); // Save current state
     });
 
     canvas.addEventListener('mouseup', () => {
@@ -81,6 +94,19 @@
 
     resetBtn.addEventListener('click', () => {
       drawMaze();
+      undoStack.length = 0;
+    });
+
+    undoBtn.addEventListener('click', () => {
+      if (undoStack.length > 0) {
+        const previous = undoStack.pop();
+        const imgUndo = new Image();
+        imgUndo.onload = () => {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(imgUndo, 0, 0);
+        };
+        imgUndo.src = previous;
+      }
     });
   </script>
 </body>
